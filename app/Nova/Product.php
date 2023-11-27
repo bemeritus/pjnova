@@ -2,9 +2,14 @@
 
 namespace App\Nova;
 
+use Brick\Money\Currency;
+use Faker\Core\Number;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Markdown;
 use Laravel\Nova\Fields\Slug;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Product extends Resource
@@ -14,14 +19,14 @@ class Product extends Resource
      *
      * @var class-string<\App\Models\Product>
      */
-    public static $model = \App\Models\Product::class;
+    public static string $model = \App\Models\Product::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -35,23 +40,59 @@ class Product extends Resource
     /**
      * Get the fields displayed by the resource.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param NovaRequest $request
      * @return array
      */
-    public function fields(NovaRequest $request)
+    public function fields(NovaRequest $request): array
     {
         return [
-            Slug::make('Slug of Product', 'Slug')->from('name')
+            ID::make()->sortable(),
+
+            Slug::make('Slug','slug')
+                ->from('name')
+                ->required()
+                ->hideFromIndex()
+                ->withMeta(['extraAttributes' => [
+                    'radonly' => true
+                ]]),
+
+            Text::make('Name','name')
+                ->required()
+                ->showOnPreview()
+                ->placeholder('Product name...'),
+
+            Markdown::make('Description','description')
+                ->required()
+                ->showOnPreview(),
+
+            \Laravel\Nova\Fields\Number::make('Price','price')
+                ->required()
+                ->showOnPreview()
+                ->placeholder('"Product price'),
+
+            Text::make('Sku','sku')
+                ->required()
+                ->placeholder('Product SKU...'),
+
+            \Laravel\Nova\Fields\Number::make('Quantity','quantity')
+                ->required()
+                ->showOnPreview()
+                ->placeholder('Product quantity...'),
+
+            Boolean::make('Status', 'is_published')
+                ->required()
+                ->showOnPreview(),
+
         ];
     }
 
     /**
      * Get the cards available for the request.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param NovaRequest $request
      * @return array
      */
-    public function cards(NovaRequest $request)
+    public function cards(NovaRequest $request): array
     {
         return [];
     }
@@ -59,10 +100,10 @@ class Product extends Resource
     /**
      * Get the filters available for the resource.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param NovaRequest $request
      * @return array
      */
-    public function filters(NovaRequest $request)
+    public function filters(NovaRequest $request): array
     {
         return [];
     }
@@ -70,10 +111,10 @@ class Product extends Resource
     /**
      * Get the lenses available for the resource.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param NovaRequest $request
      * @return array
      */
-    public function lenses(NovaRequest $request)
+    public function lenses(NovaRequest $request): array
     {
         return [];
     }
@@ -81,10 +122,10 @@ class Product extends Resource
     /**
      * Get the actions available for the resource.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param NovaRequest $request
      * @return array
      */
-    public function actions(NovaRequest $request)
+    public function actions(NovaRequest $request): array
     {
         return [];
     }
