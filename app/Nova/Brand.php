@@ -36,7 +36,6 @@ class Brand extends Resource
         'id', 'name'
     ];
 
-    public static $tableStyle = 'tight';
     public static $showColumnBorders = true;
     public static $perPageOptions = [50, 100, 150];
     /**
@@ -74,7 +73,7 @@ class Brand extends Resource
             Boolean::make('Status', 'is_published')
                 ->sortable()
                 ->showOnPreview()
-                ->textAlign('left'),
+                ->textAlign('center'),
 
             HasMany::make('Products')
         ];
