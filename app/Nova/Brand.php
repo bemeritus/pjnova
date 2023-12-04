@@ -2,12 +2,13 @@
 
 namespace App\Nova;
 
-use Faker\Provider\Text;
+
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\URL;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -51,11 +52,11 @@ class Brand extends Resource
                 ->sortable()
                 ->textAlign('center'),
 
-            \Laravel\Nova\Fields\Text::make('Name')
+            Text::make('Name')
                 ->sortable()
-                ->rules('required', 'max:255')
-                ->updateRules('unique:brands, name, {{resourceId}}')
-                ->creationRules('unique:brands, name, {{resourceID}}')
+                ->rules('required', 'max:255','unique:brands')
+//                ->updateRules(', name, {{resourceId}}')
+//                ->creationRules('unique:brands, name, {{resourceId}}')
                 ->showOnPreview()
                 ->textAlign('center'),
 
@@ -64,7 +65,7 @@ class Brand extends Resource
                 ->required()
                 ->textAlign('center'),
 
-           \Laravel\Nova\Fields\Text::make('Industry')
+           Text::make('Industry')
                 ->sortable()
                 ->required()
                 ->showOnPreview()

@@ -2,14 +2,20 @@
 
 namespace App\Nova;
 
-use Brick\Money\Currency;
-use Faker\Core\Number;
+use App\Nova\Filters\ProductBrand;
+use App\Nova\Metrics\AveragePrice;
+use App\Nova\Metrics\NewProducts;
+
+
+use App\Nova\Metrics\ProductsPerDay;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Markdown;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Slug;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -61,7 +67,7 @@ class Product extends Resource
                 ->required()
                 ->hideFromIndex()
                 ->withMeta(['extraAttributes' => [
-                    'radonly' => true
+                    'readonly' => true
                 ]]),
 
             Text::make('Name','name')
@@ -75,7 +81,7 @@ class Product extends Resource
                 ->required()
                 ->showOnPreview(),
 
-            \Laravel\Nova\Fields\Number::make('Price','price')
+            Number::make('Price','price')
                 ->required()
                 ->showOnPreview()
                 ->placeholder('"Product price')
@@ -88,7 +94,7 @@ class Product extends Resource
                 ->textAlign('center')
                 ->sortable(),
 
-            \Laravel\Nova\Fields\Number::make('Quantity','quantity')
+            Number::make('Quantity','quantity')
                 ->required()
                 ->showOnPreview()
                 ->placeholder('Product quantity...')
@@ -115,7 +121,11 @@ class Product extends Resource
      */
     public function cards(NovaRequest $request): array
     {
-        return [];
+        return [
+            new NewProducts(),
+            new AveragePrice(),
+            new ProductsPerDay(),
+        ];
     }
 
     /**
@@ -126,7 +136,9 @@ class Product extends Resource
      */
     public function filters(NovaRequest $request): array
     {
-        return [];
+        return [
+//            new ProductBrand(),
+        ];
     }
 
     /**

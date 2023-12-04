@@ -14,7 +14,7 @@ class Product extends Model
         'slug', 'name', 'description', 'price', 'sku', 'quantity', 'is_published'
     ];
 
-    public function brand()
+    public function brand(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Brand::class);
     }
