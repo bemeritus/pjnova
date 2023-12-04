@@ -2,26 +2,23 @@
 
 namespace App\Nova;
 
-use Brick\Money\Currency;
-use Faker\Core\Number;
+use Faker\Provider\Text;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Markdown;
-use Laravel\Nova\Fields\Slug;
-use Laravel\Nova\Fields\Text;
+
+use Laravel\Nova\Fields\URL;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Product extends Resource
+class Brand extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Product>
+     * @var class-string<\App\Models\Brand>
      */
-    public static string $model = \App\Models\Product::class;
+    public static string $model = \App\Models\Brand::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -36,13 +33,12 @@ class Product extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'price', 'description', 'sku', 'quantity', "is_published",
+        'id', 'name'
     ];
 
-   public static $tableStyle = 'tight';
-   public static $showColumnBorders = true;
-   public static $perPageOptions = [50, 100, 150];
-
+    public static $tableStyle = 'tight';
+    public static $showColumnBorders = true;
+    public static $perPageOptions = [50, 100, 150];
     /**
      * Get the fields displayed by the resource.
      *
@@ -56,54 +52,29 @@ class Product extends Resource
                 ->sortable()
                 ->textAlign('center'),
 
-            Slug::make('Slug','slug')
-                ->from('name')
-                ->required()
-                ->hideFromIndex()
-                ->withMeta(['extraAttributes' => [
-                    'radonly' => true
-                ]]),
-
-            Text::make('Name','name')
+            \Laravel\Nova\Fields\Text::make('Name')
+                ->sortable()
                 ->required()
                 ->showOnPreview()
-                ->placeholder('Product name...')
-                ->textAlign('left')
-                ->sortable(),
+                ->textAlign('center'),
 
-            Markdown::make('Description','description')
+            URL::make('Website URL', 'website_url')
+                ->showOnPreview()
                 ->required()
-                ->showOnPreview(),
+                ->textAlign('center'),
 
-            \Laravel\Nova\Fields\Number::make('Price','price')
+           \Laravel\Nova\Fields\Text::make('Industry')
+                ->sortable()
                 ->required()
                 ->showOnPreview()
-                ->placeholder('"Product price')
-                ->textAlign('center')
-                ->sortable(),
-
-            Text::make('Sku','sku')
-                ->required()
-                ->placeholder('Product SKU...')
-                ->textAlign('center')
-                ->sortable(),
-
-            \Laravel\Nova\Fields\Number::make('Quantity','quantity')
-                ->required()
-                ->showOnPreview()
-                ->placeholder('Product quantity...')
-                ->textAlign('center')
-                ->sortable(),
+                ->textAlign('center'),
 
             Boolean::make('Status', 'is_published')
-                ->required()
-                ->textAlign('center')
-                ->sortable(),
-
-            BelongsTo::make('Brand')
                 ->sortable()
                 ->showOnPreview()
-                ->textAlign('center')
+                ->textAlign('left'),
+
+            HasMany::make('Products')
         ];
     }
 
