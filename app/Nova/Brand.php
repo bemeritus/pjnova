@@ -54,7 +54,9 @@ class Brand extends Resource
 
             \Laravel\Nova\Fields\Text::make('Name')
                 ->sortable()
-                ->required()
+                ->rules('required', 'max:255')
+                ->updateRules('unique:brands, name, {{resourceId}}')
+                ->creationRules('unique:brands, name, {{resourceID}}')
                 ->showOnPreview()
                 ->textAlign('center'),
 
