@@ -12,7 +12,8 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "symfony/polyfill-intl-icu": "^1.28",
-        "vyuldashev/nova-money-field": "^2.0"
+        "vyuldashev/nova-money-field": "^2.0",
+        "ext-http": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

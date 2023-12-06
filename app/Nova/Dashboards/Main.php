@@ -2,6 +2,8 @@
 
 namespace App\Nova\Dashboards;
 
+use App\Nova\Metrics\RegisteredUsers;
+use App\Nova\Metrics\UsersPerRole;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Dashboards\Main as Dashboard;
 
@@ -12,10 +14,16 @@ class Main extends Dashboard
      *
      * @return array
      */
-    public function cards()
+    public function cards(): array
     {
         return [
-            new Help,
+            new UsersPerRole(),
+            new RegisteredUsers()
         ];
+    }
+
+    public function name(): string
+    {
+        return 'Dashboard';
     }
 }
